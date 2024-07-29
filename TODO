@@ -1,0 +1,18 @@
+model -> view -> url -> template
+
+
+1. like va favourite pagelar (view -> url -> template)
+2. order list va order detail (view -> url -> template
+3. order list pagega pdf generator qo'shish
+5. o2auth  google, telegram, facebook
+6. serverga qo'yish
+7. review
+8. how to write signals
+
+
+-------------------------------------
+
+formlar bilan ishlash
+login/register/logoutlarni norm o'rganish
+
+(just try to focus your studies)

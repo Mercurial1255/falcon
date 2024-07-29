@@ -1,0 +1,41 @@
+[
+{
+  "model": "apps.category",
+  "pk": 1,
+  "fields": {
+    "name": "Elektronika",
+    "slug": "elektronika",
+    "parent": null,
+    "lft": 1,
+    "rght": 6,
+    "tree_id": 1,
+    "level": 0
+  }
+},
+{
+  "model": "apps.category",
+  "pk": 2,
+  "fields": {
+    "name": "Smartfonlar",
+    "slug": "smartfonlar",
+    "parent": 1,
+    "lft": 4,
+    "rght": 5,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "apps.category",
+  "pk": 3,
+  "fields": {
+    "name": "Laptoplar",
+    "slug": "laptoplar",
+    "parent": 1,
+    "lft": 2,
+    "rght": 3,
+    "tree_id": 1,
+    "level": 1
+  }
+}
+]
