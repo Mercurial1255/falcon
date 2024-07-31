@@ -1,5 +1,6 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import CASCADE, ForeignKey, Model, CharField, ImageField, IntegerField, EmailField, TextField, \
-    JSONField, ManyToManyField, PositiveIntegerField, BooleanField, TextChoices, PositiveSmallIntegerField
+    JSONField, ManyToManyField, PositiveIntegerField, BooleanField, TextChoices, PositiveSmallIntegerField, Sum, F, FileField
 from django.utils import timezone
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
@@ -30,12 +31,12 @@ class Product(CreatedBaseModel):
     title = CharField(max_length=100)
     is_premium = BooleanField(default=False)
     price = IntegerField()
-    discount = IntegerField(default=0)
+    discount = IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     category = ForeignKey('apps.Category', CASCADE)
     shipping_cost = IntegerField(default=0)
     quantity = IntegerField(default=0)
     tags = ManyToManyField('apps.Tag', blank=True)
-    specifications = JSONField(default=dict)
+    specifications = JSONField(default=dict, blank=True, null=True)
     short_description = CKEditor5Field('Short description', config_name='extends')
     description = CKEditor5Field('Long description', config_name='extends')
 
@@ -101,6 +102,14 @@ class Order(CreatedBaseModel):
     address = ForeignKey('apps.Address', CASCADE)
     owner = ForeignKey('apps.User', CASCADE)
     status = CharField(max_length=50, choices=Status.choices)
+    pdf_file = FileField(upload_to='order/pdf/', null=True, blank=True)
+
+    @property
+    def total(self):
+        return self.items.aggregate(
+            total=Sum(F('quantity') * (F('product__price') * (
+                    100 - F('product__discount')) / 100)) + Sum(F('product__shipping_cost'))
+        )
 
 
 class OrderItem(Model):

@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-102h31e-$bzp^9rkx&a=z6=ydwc_qavuoo@n6+10%)p8lbi__$'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,7 +82,7 @@ AUTH_USER_MODEL = 'apps.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+#
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -293,3 +293,4 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/'
+APPEND_SLASH = True

@@ -120,12 +120,20 @@
                                             </div>
                                         </div>
                                         <div class="mt-2">
-                                            
+
                                             <a
                                                     class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0"
-                                                    href="{% url 'product_detail_page' product.pk %}"><span class="far fa-heart"></span><span
+                                                    href="{% url 'like' product.pk %}"><span
+                                                    class="far fa-heart"></span><span
                                                     class="ms-2 d-none d-md-inline-block">Favourite</span></a>
-
+{#                                            <form method="post" action="{% url 'like' product.pk %}">#}
+{#                                                {% csrf_token %}#}
+{#                                                <button type="submit"#}
+{#                                                        class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0">#}
+{#                                                    <span class="far fa-heart"></span>#}
+{#                                                    <span class="ms-2 d-none d-md-inline-block">Favourite</span>#}
+{#                                                </button>#}
+{#                                            </form>#}
                                             <a class="btn btn-sm btn-primary d-lg-block mt-lg-2"
                                                href="{% url 'add_to_cart_page' product.pk %}">
                                                 <span class="fas fa-cart-plus"> </span>

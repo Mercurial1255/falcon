@@ -76,7 +76,7 @@
                             class="d-none d-sm-inline-block">Add To Cart</span></a>
                     </div>
                     <div class="col-auto px-0">
-                        <form method="post" action="{% url 'product_detail_page' product.pk %}">
+                        <form method="post" action="{% url 'like' product.pk %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-outline-danger border-300 {% if user_has_liked %}active{% endif %}"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title="Add to Wish List">

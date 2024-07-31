@@ -8,7 +8,7 @@ from apps.models import Address
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 0
+    extra = 1
     min = 1
     max = 3
 

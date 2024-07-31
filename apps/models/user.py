@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinLengthValidator
 from django.db.models import OneToOneField, Model, PositiveSmallIntegerField, PositiveIntegerField, ForeignKey, CASCADE, \
     Sum, CharField, DateField, BooleanField
 

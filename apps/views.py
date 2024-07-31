@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum, F
-from django.http import Http404
+from django.http import FileResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -11,6 +11,7 @@ from apps.models import Product, Category, User, Cart, Address
 from .forms import UserRegisterModelForm, OrderCreateModelForm
 from .models.product import Favourite, Order
 from .tasks import send_to_email
+from .utils import make_pdf
 
 
 class CategoryMixin:
@@ -64,25 +65,11 @@ class ProductDetailView(CategoryMixin, DetailView):
         )
         return context
 
-    def post(self, request, *args, **kwargs):
-        product_id = kwargs.get('pk')
-        product = get_object_or_404(Product, id=product_id)
-        favourite, created = Favourite.objects.get_or_create(user=request.user, product=product)
-
-        if created:
-            favourite.is_liked = True
-            favourite.save()
-        else:
-            favourite.is_liked = not favourite.is_liked
-            favourite.save()
-
-        return redirect('product_detail_page', pk=product.pk)
-
 
 class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
     queryset = User.objects.all()
     template_name = 'apps/auth/settings.html'
-    fields = 'first_name', 'last_name'
+    fields = 'first_name', 'last_name', 'email',
     success_url = reverse_lazy('settings_page')
 
     def get_object(self, queryset=None):
@@ -106,13 +93,15 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect('product_list_page')
 
 
-class LikeView(View):
+class LikeView(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
-        product = Product.objects.get(id=pk)
-        user = request.user
-        obj, created = Favourite.objects.get_or_create(user=user, product=product)
+        product = get_object_or_404(Product, id=pk)
+        favourite, created = Favourite.objects.get_or_create(user=request.user, product=product)
 
-        return redirect('product_detail_page')
+        favourite.is_liked = not favourite.is_liked
+        favourite.save()
+
+        return redirect('product_detail_page', pk=product.pk)
 
 
 class AddToCartView(LoginRequiredMixin, View):
@@ -214,6 +203,15 @@ class OrderDetailView(LoginRequiredMixin, CategoryMixin, DetailView):
             return super().get_queryset()
         return super().get_queryset().filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order = self.get_object()
+        total_shipping_cost = \
+        order.items.aggregate(total_shipping_cost=Sum(F('product__shipping_cost') * F('quantity')))[
+            'total_shipping_cost']
+        context['total_shipping_cost'] = total_shipping_cost
+        return context
+
 
 class OrderListView(LoginRequiredMixin, CategoryMixin, ListView):
     model = Order
@@ -228,35 +226,31 @@ class OrderListView(LoginRequiredMixin, CategoryMixin, ListView):
 
 
 # address
-class AddressCreateView(CategoryMixin, CreateView):
+class AddressCreateView(LoginRequiredMixin, CategoryMixin, CreateView):
     model = Address
     template_name = 'apps/auth/address_form.html'
     fields = ['full_name', 'street', 'zip_code', 'city', 'phone', 'user']
     success_url = reverse_lazy('checkout_page')
 
 
-class AddressUpdateView(CategoryMixin, UpdateView):
+class AddressUpdateView(LoginRequiredMixin, CategoryMixin, UpdateView):
     model = Address
     template_name = 'apps/auth/address_form.html'
     fields = ['full_name', 'street', 'zip_code', 'city', 'phone', 'user']
     success_url = reverse_lazy('checkout_page')
 
-# class LikeProductView(LoginRequiredMixin, View):
-#     def post(self, request, product_id):
-#         product = get_object_or_404(Product, id=product_id)
-#         user = request.user
-#
-#         # Check if the product is already liked by the user
-#         favourite, created = Favourite.objects.get_or_create(user=user, product=product)
-#
-#         if created:
-#             # The user has just liked the product
-#             favourite.is_liked = True
-#             favourite.save()
-#         else:
-#             # The user has already liked the product, so toggle the like status
-#             favourite.is_liked = not favourite.is_liked
-#             favourite.save()
-#
-#         # Redirect to the previous page or wherever you want
-#         return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+class OrderPdfCreateView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        order = get_object_or_404(Order, pk=pk)
+        if not order.pdf_file:
+            make_pdf(order)
+        # return FileResponse(order.pdf_file.open(), as_attachment=True)
+        return FileResponse(order.pdf_file, as_attachment=True)
+
+
+class OrderDeleteView(LoginRequiredMixin, CategoryMixin, View):
+    def get(self, request, pk):
+        order = get_object_or_404(Order, id=pk)
+        order.delete()
+        return redirect('order_list_page')

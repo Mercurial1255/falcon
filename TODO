@@ -1,18 +1,20 @@
 model -> view -> url -> template
 
-
-1. like va favourite pagelar (view -> url -> template)
-2. order list va order detail (view -> url -> template
-3. order list pagega pdf generator qo'shish
-5. o2auth  google, telegram, facebook
-6. serverga qo'yish
-7. review
-8. how to write signals
-
+1. order detail (view -> url -> template
+2. o2auth  google, telegram, facebook
+3. review (list display)
 
 -------------------------------------
+as a topic:
+-------------------------------------
+serverga qo'yish
+formlar
+login/register/logoutlarni
+signals
 
-formlar bilan ishlash
-login/register/logoutlarni norm o'rganish
+-----------questions----------------
+1)description = CKEditor5Field('Long description', config_name='extends')
+  config name's meaning?
+2)
 
 (just try to focus your studies)
