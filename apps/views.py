@@ -7,11 +7,10 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from apps.models import Product, Category, User, Cart, Address
-from .forms import UserRegisterModelForm, OrderCreateModelForm
-from .models.product import Favourite, Order
-from .tasks import send_to_email
-from .utils import make_pdf
+from apps.models import Product, Category, User, Cart, Address, Favourite, Order
+from apps.forms import UserRegisterModelForm, OrderCreateModelForm
+from apps.tasks import send_to_email
+from apps.utils import make_pdf
 
 
 class CategoryMixin:
