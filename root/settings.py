@@ -241,7 +241,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('USER_EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('PASSWORD_EMAIL')
 
-CELERY_BROKER_URL = 'redis://localhost:6379/'
+CELERY_BROKER_URL = os.getenv('REDIS_HOST')
 
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'

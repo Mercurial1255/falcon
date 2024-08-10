@@ -6,6 +6,7 @@ billiard==4.2.0
 celery==5.4.0
 certifi==2024.7.4
 cffi==1.16.0
+chardet==5.2.0
 charset-normalizer==3.3.2
 click==8.1.7
 click-didyoumean==0.3.1
@@ -19,12 +20,12 @@ django-celery-beat==2.6.0
 django-celery-results==2.5.1
 django-ckeditor==6.7.1
 django-ckeditor-5==0.2.13
-django-flower==1.0.0
 django-jazzmin==3.0.0
 django-jinja==2.11.0
 django-js-asset==2.2.0
 django-mptt==0.16.0
 django-timezone-field==6.1.0
+flower>=2.1.0
 gevent==24.2.1
 greenlet==3.0.3
 humanize==0.5.1
@@ -36,6 +37,7 @@ oauthlib==3.2.2
 paramiko==3.4.0
 pillow==10.3.0
 plumbum==1.8.3
+prometheus_client==0.20.0
 prompt_toolkit==3.0.47
 psycopg2-binary==2.9.9
 pycparser==2.22
@@ -46,12 +48,14 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
 redis==5.0.7
+reportlab==4.2.2
 requests==2.32.3
 requests-oauthlib==2.0.0
 rpyc==6.0.0
 setuptools==70.2.0
 six==1.16.0
 sqlparse==0.5.0
+tornado==6.4.1
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
@@ -59,5 +63,3 @@ vine==5.1.0
 wcwidth==0.2.13
 zope.event==5.0
 zope.interface==6.4.post2
-
-reportlab~=4.2.2
